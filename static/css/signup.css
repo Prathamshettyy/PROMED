@@ -1,0 +1,166 @@
+/* signup.css */
+
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #222831; /* Dark futuristic background */
+    color: #eeeeee; /* Light text for readability */
+}
+
+/* Header */
+header {
+    background-color: #393e46; /* Navbar background matching homepage */
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li {
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #00adb5; /* Accent color for links */
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: #ff5722; /* Hover and active link color */
+}
+
+/* Signup Form Container */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px); /* Full height minus header and footer */
+    padding: 2rem;
+}
+
+/* Signup Form */
+.signup-form {
+    background-color: #393e46; /* Card-like background for the signup form */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.signup-form h2 {
+    color: #00adb5; /* Accent color for headings */
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #00adb5;
+    border-radius: 5px;
+    background-color: #222831; /* Input background */
+    color: #eeeeee; /* Input text color */
+    font-size: 1rem;
+}
+
+.input-group input::placeholder {
+    color: #aaaaaa; /* Placeholder text color */
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #ff5722; /* Highlight color for focus */
+    box-shadow: 0 0 5px rgba(255, 87, 34, 0.8);
+}
+
+/* Submit Button */
+.btn-submit {
+    display: inline-block;
+    background-color: #00adb5; /* Primary button color */
+    color: #222831; /* Button text color */
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: #ff5722; /* Hover color for button */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Login Link */
+.login-link {
+    margin-top: 1rem;
+}
+
+.login-link p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #eeeeee; /* Text color */
+}
+
+.login-link a {
+    color: #00adb5; /* Accent color for links */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    color: #ff5722; /* Hover color for links */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #393e46; /* Footer background matching navbar */
+    color: #00adb5;
+    font-size: 0.9rem;
+    border-radius: 0 0 10px 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .signup-form {
+        padding: 1.5rem;
+    }
+
+    .signup-form h2 {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,138 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #fffaf3; /* Light orange tint for the background */
+    color: #333; /* Darker text for readability */
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(to right, #ff9f1c, #e68a00); /* Gradient header with orange tones */
+    padding: 1rem 0;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li {
+    margin: 0 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: #ff5722; /* Bright orange for hover/active */
+}
+
+main {
+    padding: 2rem 0;
+}
+
+.about-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff7e6; /* Light orange background */
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    color: #ff9f1c; /* Main heading with bright orange */
+    margin-bottom: 1.5rem;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #555; /* Dark gray for better readability */
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #e68a00; /* Subheading with a darker orange */
+    margin-bottom: 1rem;
+}
+
+ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    list-style: square;
+    color: #555;
+}
+
+ul li {
+    margin-bottom: 0.7rem;
+    font-size: 1.1rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #ff9f1c; /* Button with bright orange */
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #ffffff; /* Darker orange on hover */
+    transform: translateY(-3px);
+}
+
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #ff9f1c; /* Footer with bright orange */
+    color: #ffffff;
+    margin-top: 3rem;
+    font-size: 1rem;
+    border-radius: 10px 10px 0 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+    }
+
+    header nav ul li {
+        margin: 10px 0;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}

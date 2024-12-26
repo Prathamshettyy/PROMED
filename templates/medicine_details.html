@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/medicine_detail.css') }}">
+    <title>Medicine Details</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="{{ url_for('home') }}">ProMed</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+                    <li><a href="{{ url_for('add_medicine') }}" class="{% if request.endpoint == 'add_medicine' %}active{% endif %}">Add Medicine</a></li>
+                    <li><a href="{{ url_for('about_us') }}" class="{% if request.endpoint == 'about_us' %}active{% endif %}">About Us</a></li>
+                    <li><a href="{{ url_for('login') }}" class="{% if request.endpoint == 'login' %}active{% endif %}">Login</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <h1>Medicine List</h1>
+            <ul class="medicine-list">
+                {% for medicine in medicines %}
+                <li class="medicine-item">
+                    <div class="medicine-info">
+                        <h2>{{ medicine.name }}</h2>
+                        <p><strong>Factory:</strong> {{ medicine.factory_name }}</p>
+                        <p><strong>Manufacturing Date:</strong> {{ medicine.manufacturing_date.strftime('%d-%m-%Y') }}</p>
+                        <p><strong>Expiry Date:</strong> {{ medicine.expiry_date.strftime('%d-%m-%Y') }}</p>
+                        <p><strong>Uses:</strong> {{ medicine.uses }}</p>
+                    </div>
+                    <div class="qr-section">
+                        <h3>QR Code:</h3>
+                        <img src="{{ url_for('static', filename=medicine.qr_code.split('static/')[-1]) }}" 
+                             alt="QR Code for {{ medicine.name }}" class="qr-code-img">
+                        <a href="{{ url_for('view_medicine', medicine_id=medicine.id) }}" class="btn">View Details</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </main>
+    </div>
+</body>
+</html>

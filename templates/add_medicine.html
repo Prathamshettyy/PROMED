@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_medicine.css') }}">
+    <title>Add Medicine</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('medicine_details') }}">Medicine Details</a></li>
+                    <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Add Medicine</h1>
+            <form method="POST" action="{{ url_for('add_medicine') }}">
+                <label for="name">Medicine Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="factory_name">Factory Name:</label>
+                <input type="text" id="factory_name" name="factory_name" required>
+
+                <label for="manufacturing_date">Manufacturing Date:</label>
+                <input type="date" id="manufacturing_date" name="manufacturing_date" required>
+
+                <label for="expiry_date">Expiry Date:</label>
+                <input type="date" id="expiry_date" name="expiry_date" required>
+
+                <label for="uses">Uses:</label>
+                <textarea id="uses" name="uses" required></textarea>
+
+                <button type="submit">Add Medicine</button>
+            </form>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 ProMed. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
