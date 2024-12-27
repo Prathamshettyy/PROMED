@@ -44,7 +44,7 @@ header nav ul li a {
 }
 
 header nav ul li a:hover {
-    color: #00d1b2;
+    color: #ff7043;
 }
 
 main {
@@ -90,7 +90,7 @@ main {
 }
 
 .cta-button {
-    background-color: #00d1b2;
+    background-color: #ff7043;
     color: white;
     text-decoration: none;
     padding: 12px 30px;
@@ -100,7 +100,7 @@ main {
 }
 
 .cta-button:hover {
-    background-color: #00b094;
+    background-color: #ff5733;
 }
 
 /* Features Section */
@@ -136,7 +136,7 @@ main {
 
 .feature-card h3 {
     font-size: 1.8rem;
-    color: #00d1b2;
+    color: #ff7043;
     margin-bottom: 15px;
 }
 
@@ -203,14 +203,14 @@ footer {
 }
 
 .input-group input:focus {
-    border-color: #00d1b2;
+    border-color: #ff7043;
     outline: none;
 }
 
 .btn-submit {
     width: 100%;
     padding: 14px;
-    background: #00d1b2;
+    background: #ff7043;
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -220,7 +220,7 @@ footer {
 }
 
 .btn-submit:hover {
-    background: #00b094;
+    background: #ff5733;
 }
 
 .signup-link {
@@ -229,7 +229,7 @@ footer {
 }
 
 .signup-link a {
-    color: #00d1b2;
+    color: #ff7043;
     text-decoration: none;
 }
 
