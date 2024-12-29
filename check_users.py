@@ -1,7 +1,7 @@
-from app import app, db, User  # Import app, db, and User model
+from app import app, db, User 
 
-# Start the application context
+
 with app.app_context():
-    users = User.query.all()  # Query all users
+    users = User.query.all()  
     for user in users:
-        print(user.username, user.email)  # Print each user's username and email
+        print(user.username, user.email)  
