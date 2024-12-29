@@ -3,7 +3,7 @@
 ProMed is a web application designed to manage and retrieve information about medicines using QR codes and NFC tags. The system allows users to add, view, and track medicine details, including expiry and manufacturing dates.
 
 
-![ProMed Project Banner](https://github.com/aaronfernandes21/ProMed/static/images/project-banner.png)
+![ProMed Project Banner](https://github.com/aaronfernandes21/PROMED/blob/master/static/images/project-banner.png)
 
 
 ---
