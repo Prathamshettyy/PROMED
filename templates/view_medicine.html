@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_medicine.css') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_medicine.css') }}" />
     <title>View Medicine</title>
 </head>
 <body>
     <div class="container">
         <header>
             <nav class="navbar">
-                
                 <ul class="nav-links">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('add_medicine') }}">Add Medicine</a></li>
@@ -28,20 +27,45 @@
                     <p><strong>Name:</strong> {{ medicine.name }}</p>
                     <p><strong>Factory Name:</strong> {{ medicine.factory_name }}</p>
                     <p><strong>Manufacturing Date:</strong> {{ medicine.manufacturing_date.strftime('%d-%m-%Y') }}</p>
-                    <p><strong>Expiry Date:</strong> {{ medicine.expiry_date.strftime('%d-%m-%Y') }}</p>
                     <p><strong>Uses:</strong> {{ medicine.uses }}</p>
+                    <p><strong>QR Code:</strong></p>
+                    <img src="{{ url_for('static', filename=medicine.qr_code.split('static/')[-1]) }}" 
+                         alt="QR Code for {{ medicine.name }}" class="qr-code-img" />
                 </div>
-                <div class="qr-section">
-                    <div class="qr-code-container">
-                        <h3>QR Code:</h3>
-                        <img src="{{ url_for('static', filename=medicine.qr_code.split('static/')[-1]) }}" 
-                             alt="QR Code for {{ medicine.name }}" class="qr-code-img">
-                    </div>
-                    <div class="btn-container">
-                        <a href="{{ url_for('view_medicine', medicine_id=medicine.id) }}" class="btn">View Details</a>
-                    </div>
+
+                <div class="tablet-list">
+                    <h3>Tablet Strips</h3>
+                    {% if medicine.tablets %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Batch Code</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tablet in medicine.tablets %}
+                                <tr>
+                                    <td>{{ tablet.batch_code }}</td>
+                                    <td>{{ tablet.expiry_date.strftime('%d-%m-%Y') }}</td>
+                                    <td>{{ 'Used' if tablet.used else 'Unused' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No tablet strips recorded for this medicine.</p>
+                    {% endif %}
                 </div>
-                
+
+                <div class="scanner-section">
+                    <h3>Scan QR Code</h3>
+                    <video id="preview" width="300" height="200" style="border:1px solid #ccc;"></video>
+
+                    <h3>Scan NFC Tag</h3>
+                    <button id="nfc-read">Read NFC Tag</button>
+                </div>
             </div>
         </main>
 
@@ -49,5 +73,52 @@
             <p>&copy; 2024 ProMed. All rights reserved.</p>
         </footer>
     </div>
+
+    <!-- Include Instascan for QR scanning -->
+    <script src="https://unpkg.com/instascan@1.0.0/umd/instascan.min.js"></script>
+    <script>
+        // QR code scanner initialization
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        scanner.addListener('scan', function (content) {
+            // Navigate to scanned medicine (assuming content is medicine id)
+            window.location.href = `/view_medicine/${content}`;
+        });
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                alert('No cameras found for QR scanning');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            alert('Error initializing camera for scanning: ' + e);
+        });
+
+        // Web NFC reading functionality
+        document.getElementById('nfc-read').addEventListener('click', async () => {
+            try {
+                const ndef = new NDEFReader();
+                await ndef.scan();
+                ndef.onreading = event => {
+                    const decoder = new TextDecoder();
+                    const record = event.message.records[0];
+                    let tagData = '';
+                    if (record.recordType === "text" || record.recordType === "url") {
+                        tagData = decoder.decode(record.data);
+                    }
+                    if (tagData) {
+                        window.location.href = `/view_medicine/${tagData}`;
+                    } else {
+                        alert('NFC tag empty or unrecognized format');
+                    }
+                };
+                ndef.onreadingerror = () => {
+                    alert('Error reading NFC tag');
+                };
+            } catch (error) {
+                alert('NFC not supported or permission denied: ' + error);
+            }
+        });
+    </script>
 </body>
 </html>

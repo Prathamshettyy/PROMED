@@ -1,61 +1,71 @@
 import os
+from datetime import datetime
 from flask import (
-    Flask, render_template, request,
-    redirect, url_for, flash, session
+    Flask, render_template, request, redirect,
+    url_for, flash, session
 )
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
-import pyqrcode, bcrypt, dotenv
-from datetime import datetime
+from flask_mail import Mail
+from flask_migrate import Migrate
+import pyqrcode
+import bcrypt
+import dotenv
 
-# 1. Load environment variables from your .env
+# Load env vars
 dotenv.load_dotenv()
 
+# Flask app
 app = Flask(__name__)
-
-# 2. Configure app entirely from .env
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'SQLALCHEMY_DATABASE_URI',
-    'sqlite:///promed.db'       # fallback if not set
+    'SQLALCHEMY_DATABASE_URI', 'sqlite:///promed_v2.db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# 3. Mail settings from .env
-app.config['MAIL_SERVER']   = 'smtp.gmail.com'
-app.config['MAIL_PORT']     = 587
-app.config['MAIL_USE_TLS']  = True
+# Mail config
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')
 
-# 4. Initialize extensions
-db   = SQLAlchemy(app)
+# Init extensions
+db = SQLAlchemy(app)
 mail = Mail(app)
+migrate = Migrate(app, db)  # Migration support
 
-# 5. Models
+# Models
 class Medicine(db.Model):
-    id                 = db.Column(db.Integer, primary_key=True)
-    name               = db.Column(db.String(100), nullable=False)
-    factory_name       = db.Column(db.String(100), nullable=False)
-    manufacturing_date = db.Column(db.Date,    nullable=False)
-    expiry_date        = db.Column(db.Date,    nullable=False)
-    uses               = db.Column(db.Text,    nullable=False)
-    qr_code            = db.Column(db.String(200), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    factory_name = db.Column(db.String(100), nullable=False)
+    manufacturing_date = db.Column(db.Date, nullable=False)
+    uses = db.Column(db.Text, nullable=False)
+    qr_code = db.Column(db.String(200), nullable=False)
+    tablets = db.relationship('Tablet', back_populates='medicine', cascade='all, delete-orphan')
+
+class Tablet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    medicine_id = db.Column(db.Integer, db.ForeignKey('medicine.id'), nullable=False)
+    batch_code = db.Column(db.String(50), nullable=False)
+    expiry_date = db.Column(db.Date, nullable=False)
+    used = db.Column(db.Boolean, default=False)
+    medicine = db.relationship('Medicine', back_populates='tablets')
 
 class User(db.Model):
-    id       = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(200),               nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
-# 6. Routes (unchanged logic)
+# Routes
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method=='POST':
+    if request.method == 'POST':
         u = request.form['username']
         p = request.form['password']
         user = User.query.filter_by(username=u).first()
@@ -66,64 +76,75 @@ def login():
         flash("Invalid credentials!", "danger")
     return render_template('login.html')
 
-@app.route('/signup', methods=['GET','POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method=='POST':
+    if request.method == 'POST':
         u = request.form['username']
         p = request.form['password']
         if User.query.filter_by(username=u).first():
             flash("Username already exists!", "danger")
         else:
-            h = bcrypt.hashpw(p.encode(), bcrypt.gensalt()).decode()
-            db.session.add(User(username=u, password=h))
+            hashed = bcrypt.hashpw(p.encode(), bcrypt.gensalt()).decode()
+            db.session.add(User(username=u, password=hashed))
             db.session.commit()
             flash("User created! Please log in.", "success")
             return redirect(url_for('login'))
     return render_template('signup.html')
 
-@app.route('/add_medicine', methods=['GET','POST'])
+@app.route('/add_medicine', methods=['GET', 'POST'])
 def add_medicine():
-    if request.method=='POST':
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
         name = request.form['name']
-        fac  = request.form['factory_name']
-        mfg  = datetime.strptime(request.form['manufacturing_date'], '%Y-%m-%d')
-        exp  = datetime.strptime(request.form['expiry_date'],      '%Y-%m-%d')
+        factory = request.form['factory_name']
+        mfg = datetime.strptime(request.form['manufacturing_date'], '%Y-%m-%d')
         uses = request.form['uses']
+
         os.makedirs('static/qrcodes', exist_ok=True)
-        qr  = pyqrcode.create(f"{name} - {fac}")
-        fn  = f"static/qrcodes/{name}_{fac}.png"
-        qr.png(fn, scale=6)
-        m = Medicine(
-            name=name, factory_name=fac,
+        qr = pyqrcode.create(f"{name}|{factory}")
+        qr_filename = f"static/qrcodes/{name}_{factory}.png"
+        qr.png(qr_filename, scale=6)
+
+        med = Medicine(
+            name=name,
+            factory_name=factory,
             manufacturing_date=mfg,
-            expiry_date=exp, uses=uses,
-            qr_code=fn
+            uses=uses,
+            qr_code=qr_filename
         )
-        db.session.add(m)
+        db.session.add(med)
         db.session.commit()
-        flash("Medicine added successfully!", "success")
+
+        # Handle tablets
+        batch_codes = request.form.getlist('batch_code')
+        expiries = request.form.getlist('expiry_date')
+        for bc, exp in zip(batch_codes, expiries):
+            tab = Tablet(
+                medicine_id=med.id,
+                batch_code=bc,
+                expiry_date=datetime.strptime(exp, '%Y-%m-%d')
+            )
+            db.session.add(tab)
+        db.session.commit()
+
+        flash('Medicine and tablets added!', 'success')
         return redirect(url_for('medicine_details'))
     return render_template('add_medicine.html')
 
 @app.route('/medicine_details')
 def medicine_details():
-    meds = Medicine.query.all()
-    return render_template('medicine_details.html', medicines=meds)
+    medicines = Medicine.query.all()
+    return render_template('medicine_details.html', medicines=medicines)
 
 @app.route('/view_medicine/<int:medicine_id>')
 def view_medicine(medicine_id):
-    med = Medicine.query.get_or_404(medicine_id)
-    return render_template('view_medicine.html', medicine=med)
+    medicine = Medicine.query.get_or_404(medicine_id)
+    return render_template('view_medicine.html', medicine=medicine)
 
 @app.route('/about_us')
 def about_us():
     return render_template('about_us.html')
 
-# 7. DB init
-def create_db():
-    with app.app_context():
-        db.create_all()
-
-if __name__=='__main__':
-    create_db()
+if __name__ == '__main__':
     app.run(debug=True)
