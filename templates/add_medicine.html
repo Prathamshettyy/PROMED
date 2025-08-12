@@ -31,19 +31,11 @@
                 <label for="manufacturing_date">Manufacturing Date:</label>
                 <input type="date" id="manufacturing_date" name="manufacturing_date" required>
 
+                <label for="expiry_date">Expiry Date:</label>
+                <input type="date" id="expiry_date" name="expiry_date" required>
+
                 <label for="uses">Uses:</label>
                 <textarea id="uses" name="uses" required></textarea>
-
-                <h2>Tablet Strips</h2>
-                <div id="tablet-container">
-                    <div class="tablet-entry">
-                        <label>Batch Code:</label>
-                        <input type="text" name="batch_code" required>
-                        <label>Expiry Date:</label>
-                        <input type="date" name="expiry_date" required>
-                    </div>
-                </div>
-                <button type="button" id="add-tablet">Add Another Tablet</button>
 
                 <button type="submit">Add Medicine</button>
             </form>
@@ -53,20 +45,5 @@
             <p>&copy; 2024 ProMed. All rights reserved.</p>
         </footer>
     </div>
-
-    <script>
-        document.getElementById('add-tablet').addEventListener('click', function() {
-            const container = document.getElementById('tablet-container');
-            const entry = document.createElement('div');
-            entry.className = 'tablet-entry';
-            entry.innerHTML = `
-                <label>Batch Code:</label>
-                <input type="text" name="batch_code" required>
-                <label>Expiry Date:</label>
-                <input type="date" name="expiry_date" required>
-            `;
-            container.appendChild(entry);
-        });
-    </script>
 </body>
 </html>
