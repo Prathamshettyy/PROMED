@@ -1,141 +1,154 @@
-/* login.css */
+/* === MODERN LOGIN PAGE STYLES WITH ANIMATIONS === */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
 
 body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #222831; /* Dark futuristic background */
-    color: #ff5722; /* Light orangish text for readability */
-}
-
-header {
-    background-color: #393e46; /* Navbar background matching homepage */
-    padding: 1rem 0;
-}
-
-header nav ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-header nav ul li {
-    margin: 0 15px;
-}
-
-header nav ul li a {
-    text-decoration: none;
-    color: #ff5722; /* Accent color for links */
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-header nav ul li a:hover,
-header nav ul li a.active {
-    color: #eeeeee; /* Hover and active link color */
+font-family: 'Poppins', sans-serif;
+background: #0f0f0f;
+color: #e0e0e0;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
 }
 
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 140px); /* Full height minus header and footer */
-    padding: 2rem;
+width: 100%;
+max-width: 450px;
 }
 
 .login-form {
-    background-color: #393e46; /* Card-like background for the login form */
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
+background: #1e1e1e;
+padding: 40px;
+border-radius: 15px;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+border: 1px solid #2a2a2a;
+width: 100%;
+animation: fadeInUp 0.8s ease-out forwards;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-h2 {
-    color: #ff5722; /* Accent color for headings */
-    margin-bottom: 1.5rem;
+.login-form:hover {
+transform: translateY(-5px);
+box-shadow: 0 12px 40px rgba(255, 112, 67, 0.2);
+}
+
+.login-form h2 {
+font-size: 2rem;
+color: #fff;
+margin-bottom: 30px;
+text-align: center;
 }
 
 .input-group {
-    margin-bottom: 1.5rem;
-    text-align: left;
+margin-bottom: 25px;
 }
 
 .input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #ff5722; /* Label text color */
+display: block;
+color: #bbb;
+margin-bottom: 8px;
+font-size: 0.9rem;
 }
 
 .input-group input {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ff5722;
-    border-radius: 5px;
-    background-color: #222831; /* Input background */
-    color: #ff5722; /* Input text color */
-    font-size: 1rem;
-}
-
-.input-group input::placeholder {
-    color: #ff5722; /* Placeholder text color */
+width: 100%;
+padding: 14px;
+background: #2a2a2a;
+border: 1px solid #444;
+border-radius: 8px;
+color: #fff;
+font-size: 1rem;
+transition: all 0.3s ease;
 }
 
 .input-group input:focus {
-    outline: none;
-    border-color: #ff5722; /* Highlight color for focus */
-    box-shadow: 0 0 5px rgba(255, 87, 34, 0.8);
+border-color: #ff7043;
+outline: none;
+box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.3);
+transform: scale(1.02);
 }
 
 .btn-submit {
-    display: inline-block;
-    background-color: #ff5722; /* Primary button color */
-    color: #eeeeee; /* Button text color */
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
+width: 100%;
+padding: 15px;
+background: #ff7043;
+border: none;
+border-radius: 50px;
+color: #fff;
+font-size: 1.1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
-    background-color: #222831; /* Hover color for button */
-    box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+background-color: #ff5733;
+transform: scale(1.05);
+box-shadow: 0 0 20px rgba(255, 112, 67, 0.5);
 }
 
 .signup-link {
-    margin-top: 1rem;
-}
-
-.signup-link p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #ff5722; /* Text color */
+text-align: center;
+margin-top: 25px;
+font-size: 0.9rem;
 }
 
 .signup-link a {
-    color: #ff5722; /* Accent color for links */
-    text-decoration: none;
-    font-weight: bold;
+color: #ff7043;
+text-decoration: none;
+font-weight: 500;
 }
 
 .signup-link a:hover {
-    color: #eeeeee; /* Hover color for links */
+text-decoration: underline;
 }
 
-footer {
-    text-align: center;
-    padding: 1rem 0;
-    background-color: #393e46; /* Footer background matching navbar */
-    color: #ff5722; /* Footer text color */
-    font-size: 0.9rem;
-    border-radius: 0 0 10px 10px;
+/\* Styles for flash messages \*/
+.alert {
+padding: 1rem;
+margin-bottom: 1rem;
+border-radius: .25rem;
+text-align: center;
+font-size: 0.9rem;
+}
+
+.alert-success {
+color: #d4edda;
+background-color: #155724;
+border-color: #c3e6cb;
+}
+
+.alert-danger {
+color: #f8d7da;
+background-color: #721c24;
+border-color: #f5c6cb;
+}
+
+/\* Fix for browser autofill background \*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+-webkit-text-fill-color: #fff;
+box-shadow: 0 0 0 30px #2a2a2a inset !important;
+-webkit-box-shadow: 0 0 0 30px #2a2a2a inset !important;
+transition: background-color 5000s ease-in-out 0s;
 }
