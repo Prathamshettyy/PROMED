@@ -1,5 +1,5 @@
-__pycache__/
 .env
+__pycache__/
 *.pyc
 *.pyo
 *.log
@@ -24,3 +24,4 @@ htmlcov/
 *.lock
 *.venv/
 venv/
+env
