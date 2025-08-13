@@ -1,10 +1,16 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
+/* === STYLESHEET BUILT FROM YOUR home.css THEME === */
+
+/* General Styles - DIRECTLY FROM home.css */
+* {
     margin: 0;
     padding: 0;
-    background-color: #fffaf3;
-    color: #333;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
@@ -12,174 +18,149 @@ body {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
-/* Navbar Styles */
+/* Header & Navigation Bar - DIRECTLY FROM home.css */
 header {
-    background-color: #ff9f1c;
-    padding: 10px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 15px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-nav ul {
+header nav.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+header nav ul {
     list-style: none;
     display: flex;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
+    align-items: center;
+    gap: 40px;
 }
 
-nav ul li {
-    margin: 0 15px;
-}
-
-nav ul li a {
+header nav ul li a {
+    color: #e0e0e0;
     text-decoration: none;
-    color: #fff;
-    font-size: 18px;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-nav ul li a:hover, 
-nav ul li a.active {
-    background-color: #e68a00;
-    color: #ffffff;
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: #ff7043;
 }
 
-/* Page Title */
-h1 {
+.nav-button {
+    background-color: #ff7043;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #ff5733;
+}
+
+/* Main Content Area */
+main.container {
+    padding: 50px 0;
+}
+
+main h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
     text-align: center;
-    color: #ff9f1c;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
-/* Medicine List Styles */
-.medicine-list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+/* Medicine Details Card - STYLED TO MATCH YOUR THEME */
+.medicine-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.medicine-item {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    padding: 20px;
+.medicine-info {
+    flex: 2; /* Takes up more space */
+    min-width: 300px;
 }
 
 .medicine-info h2 {
-    margin: 0;
-    color: #333;
-    font-size: 22px;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    color: #ff7043;
+    margin-bottom: 25px;
 }
 
 .medicine-info p {
-    margin: 5px 0;
-    color: #555;
-    font-size: 16px;
+    font-size: 1.1rem;
+    color: #bbb;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 15px;
 }
 
-/* QR Section Styles */
+.medicine-info p:last-child {
+    border-bottom: none;
+}
+
+.medicine-info p strong {
+    color: #e0e0e0;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
 .qr-section {
+    flex: 1;
+    min-width: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff7e6;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    justify-content: center;
+    background: #0f0f0f;
+    padding: 30px;
+    border-radius: 10px;
 }
 
-.qr-code-container {
+.qr-section h3 {
+    font-size: 1.5rem;
     margin-bottom: 20px;
 }
 
 .qr-code-img {
-    max-width: 150px;
-    height: auto;
-    border: 2px solid #ff9f1c;
-    border-radius: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    background-color: white;
     padding: 10px;
-    background-color: #ffffff;
-    margin-top: 10px;
 }
 
-.btn-container {
-    text-align: center;
-}
-
-.btn {
-    display: inline-block;
-    background-color: #ff9f1c;
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.btn:hover {
-    background-color: #e68a00;
-    transform: translateY(-3px);
-}
-
-/* About Us and Other Sections */
-main {
-    margin-top: 20px;
-}
-
-main h1, 
-main p {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Footer (if applicable) */
+/* Footer Styling */
 footer {
     text-align: center;
-    margin-top: 20px;
-    padding: 10px 0;
-    background-color: #ff9f1c;
-    color: #fff;
-    font-size: 14px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    nav ul li {
-        margin: 10px 0;
-    }
-
-    .medicine-list {
-        grid-template-columns: 1fr;
-    }
-
-    .qr-code-img {
-        max-width: 120px;
-    }
-
-    .btn {
-        padding: 10px 15px;
-        font-size: 14px;
-    }
+    padding: 40px 0;
+    color: #777;
+    font-size: 0.9rem;
 }

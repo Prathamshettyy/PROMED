@@ -3,47 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medicine - ProMed</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/add_medicine.css') }}">
-    <title>Add Medicine</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('view_medicines') }}">View Medicines</a></li>
-                    <li><a href="{{ url_for('about_us') }}">About Us</a></li>
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                </ul>
-            </nav>
-        </header>
+    
+    <header>
+        <nav class="container">
+            <a href="{{ url_for('home') }}" class="logo">ProMed</a>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('view_medicines') }}">View Medicines</a></li> 
+                <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+                {% if session['user_id'] %}
+    <li><a href="{{ url_for('logout') }}" class="nav-button">Logout</a></li>
+{% else %}
+    <li><a href="{{ url_for('login') }}" class="nav-button">Login</a></li>
+{% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Add a New Medicine</h1>
+        <form method="POST" action="{{ url_for('add_medicine') }}">
+            
+            <label for="name">Medicine Name:</label>
+            <input type="text" id="name" name="name" required>
 
-        <main>
-            <h1>Add Medicine</h1>
-            <form method="POST" action="{{ url_for('add_medicine') }}">
-                <label for="name">Medicine Name:</label>
-                <input type="text" id="name" name="name" required>
+            <label for="factory_name">Factory Name:</label>
+            <input type="text" id="factory_name" name="factory_name" required>
 
-                <label for="factory_name">Factory Name:</label>
-                <input type="text" id="factory_name" name="factory_name" required>
+            <label for="manufacturing_date">Manufacturing Date:</label>
+            <input type="date" id="manufacturing_date" name="manufacturing_date" required>
 
-                <label for="manufacturing_date">Manufacturing Date:</label>
-                <input type="date" id="manufacturing_date" name="manufacturing_date" required>
+            <label for="expiry_date">Expiry Date:</label>
+            <input type="date" id="expiry_date" name="expiry_date" required>
 
-                <label for="expiry_date">Expiry Date:</label>
-                <input type="date" id="expiry_date" name="expiry_date" required>
+            <label for="uses">Uses:</label>
+            <textarea id="uses" name="uses" required></textarea>
 
-                <label for="uses">Uses:</label>
-                <textarea id="uses" name="uses" required></textarea>
+            <button type="submit">Add Medicine</button>
+        </form>
+    </main>
 
-                <button type="submit">Add Medicine</button>
-            </form>
-        </main>
+    <footer>
+        <p>&copy; 2025 ProMed. All Rights Reserved.</p>
+    </footer>
 
-        <footer>
-            <p>&copy; 2024 ProMed. All rights reserved.</p>
-        </footer>
-    </div>
 </body>
 </html>

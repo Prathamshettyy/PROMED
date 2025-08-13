@@ -4,44 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - ProMed</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/about_us.css') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    
     <header>
-        <nav>
+        <nav class="container">
+            <a href="{{ url_for('home') }}" class="logo">ProMed</a>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('add_medicine') }}">Add Medicine</a></li>
                 <li><a href="{{ url_for('about_us') }}" class="active">About Us</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-            </ul>
+{% if session['user_id'] %}
+    <li><a href="{{ url_for('logout') }}" class="nav-button">Logout</a></li>
+{% else %}
+    <li><a href="{{ url_for('login') }}" class="nav-button">Login</a></li>
+{% endif %}            </ul>
         </nav>
     </header>
-
-    <main>
+    
+    <main class="container">
         <section class="about-section">
-            <div class="content">
-                <h1>About Us</h1>
-                <p>
-                    ProMed is designed to help users efficiently manage medicine information. By scanning QR codes or NFC tags, users can instantly access crucial details such as the medicine's name, manufacturing and expiry dates, usage, and more.
-                </p>
+            <h1>About Us</h1>
+            <p>
+                ProMed is designed to help users efficiently manage medicine information. By scanning QR codes, users can instantly access crucial details such as the medicine's name, manufacturing and expiry dates, usage, and more.
+            </p>
 
-                <h2>Key Features:</h2>
-                <ul>
-                    <li>Add new medicines seamlessly to the database.</li>
-                    <li>Generate unique QR codes for every medicine.</li>
-                    <li>View and manage detailed medicine information.</li>
-                    <li>Login and signup functionality for personalized access.</li>
-                    <li>Alerts for medicines nearing expiration.</li>
-                </ul>
+            <h2>Key Features</h2>
+            <ul>
+                <li>Add new medicines seamlessly to the database.</li>
+                <li>Generate unique QR codes for every medicine.</li>
+                <li>View and manage detailed medicine information.</li>
+                <li>Login and signup functionality for personalized access.</li>
+                <li>Alerts for medicines nearing expiration.</li>
+            </ul>
 
-                <a href="{{ url_for('home') }}" class="cta-button">Back to Home</a>
-            </div>
+            <a href="{{ url_for('home') }}" class="cta-button">Back to Home</a>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 ProMed. All rights reserved.</p>
+        <p>&copy; 2025 ProMed. All Rights Reserved.</p>
     </footer>
+
 </body>
 </html>

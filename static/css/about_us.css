@@ -1,138 +1,164 @@
-body {
+/* === STYLESHEET BUILT FROM YOUR home.css === */
+
+/* General Styles - DIRECTLY FROM home.css */
+* {
     margin: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #fffaf3; /* Light orange tint for the background */
-    color: #333; /* Darker text for readability */
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header & Navigation Bar - DIRECTLY FROM home.css */
 header {
-    background: linear-gradient(to right, #ff9f1c, #e68a00); /* Gradient header with orange tones */
-    padding: 1rem 0;
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 1px;
 }
 
 header nav ul {
-    display: flex;
-    justify-content: center;
     list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-header nav ul li {
-    margin: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
 }
 
 header nav ul li a {
+    color: #e0e0e0;
     text-decoration: none;
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 16px;
+    font-weight: 500;
     transition: color 0.3s ease;
 }
 
 header nav ul li a:hover,
 header nav ul li a.active {
-    color: #ff5722; /* Bright orange for hover/active */
+    color: #ff7043;
 }
 
-main {
-    padding: 2rem 0;
+.nav-button {
+    background-color: #ff7043;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #ff5733;
+}
+
+/* Main Content Area - ADAPTED FOR THIS PAGE */
+main.container {
+    padding: 50px 0;
 }
 
 .about-section {
-    max-width: 1000px;
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 15px;
+    padding: 40px 50px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff7e6; /* Light orange background */
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-h1 {
-    font-size: 3rem;
     text-align: center;
-    color: #ff9f1c; /* Main heading with bright orange */
-    margin-bottom: 1.5rem;
 }
 
-p {
-    font-size: 1.2rem;
-    color: #555; /* Dark gray for better readability */
-    margin-bottom: 1.5rem;
+.about-section h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 25px;
 }
 
-h2 {
-    font-size: 2rem;
-    color: #e68a00; /* Subheading with a darker orange */
-    margin-bottom: 1rem;
-}
-
-ul {
-    margin: 1rem 0;
-    padding-left: 1.5rem;
-    list-style: square;
-    color: #555;
-}
-
-ul li {
-    margin-bottom: 0.7rem;
+.about-section p {
     font-size: 1.1rem;
+    color: #bbb;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
 }
 
+.about-section h2 {
+    font-size: 1.8rem;
+    color: #ff7043;
+    margin-bottom: 20px;
+}
+
+.about-section ul {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0 auto 30px auto;
+    max-width: 550px;
+    text-align: left;
+}
+
+.about-section ul li {
+    font-size: 1rem;
+    color: #bbb;
+    margin-bottom: 12px;
+    padding-left: 25px;
+    position: relative;
+}
+
+/* Custom list bullet styled with your theme color */
+.about-section ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #ff7043;
+    font-weight: bold;
+}
+
+/* CTA Button - Style based on your .cta-button */
 .cta-button {
     display: inline-block;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #ff9f1c; /* Button with bright orange */
+    background-color: #ff7043;
+    color: white;
     text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-    margin-top: 2rem;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .cta-button:hover {
-    background-color: #ffffff; /* Darker orange on hover */
-    transform: translateY(-3px);
+    background-color: #ff5733;
+    transform: scale(1.05);
 }
 
+/* Footer Styling */
 footer {
     text-align: center;
-    padding: 1rem 0;
-    background-color: #ff9f1c; /* Footer with bright orange */
-    color: #ffffff;
-    margin-top: 3rem;
-    font-size: 1rem;
-    border-radius: 10px 10px 0 0;
-}
-
-footer p {
-    margin: 0;
-}
-
-@media screen and (max-width: 768px) {
-    header nav ul {
-        flex-direction: column;
-    }
-
-    header nav ul li {
-        margin: 10px 0;
-    }
-
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    p {
-        font-size: 1rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
+    padding: 40px 0;
+    color: #777;
+    font-size: 0.9rem;
 }

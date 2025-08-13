@@ -3,51 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ medicine.name }} - ProMed</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/view_medicine.css') }}">
-    <title>View Medicine</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav class="navbar">
-                
-                <ul class="nav-links">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('add_medicine') }}">Add Medicine</a></li>
-                    <li><a href="{{ url_for('medicine_details') }}">Medicine Details</a></li>
-                    <li><a href="{{ url_for('about_us') }}">About Us</a></li>
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <main>
-            <h1>Medicine Details</h1>
-            <div class="medicine-details">
-                <div class="medicine-info">
-                    <p><strong>Name:</strong> {{ medicine.name }}</p>
-                    <p><strong>Factory Name:</strong> {{ medicine.factory_name }}</p>
-                    <p><strong>Manufacturing Date:</strong> {{ medicine.manufacturing_date.strftime('%d-%m-%Y') }}</p>
-                    <p><strong>Expiry Date:</strong> {{ medicine.expiry_date.strftime('%d-%m-%Y') }}</p>
-                    <p><strong>Uses:</strong> {{ medicine.uses }}</p>
-                </div>
-                <div class="qr-section">
-                    <div class="qr-code-container">
-                        <h3>QR Code:</h3>
-                        <img src="{{ url_for('static', filename=medicine.qr_code.split('static/')[-1]) }}" 
-                             alt="QR Code for {{ medicine.name }}" class="qr-code-img">
-                    </div>
-                    <div class="btn-container">
-                        <a href="{{ url_for('view_medicine', medicine_id=medicine.id) }}" class="btn">View Details</a>
-                    </div>
-                </div>
-                
+    
+    <header>
+        <nav class="container">
+            <a href="{{ url_for('home') }}" class="logo">ProMed</a>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('add_medicine') }}">Add Medicine</a></li>
+                <li><a href="{{ url_for('about_us') }}">About Us</a></li>
+                {% if session['user_id'] %}
+    <li><a href="{{ url_for('logout') }}" class="nav-button">Logout</a></li>
+{% else %}
+    <li><a href="{{ url_for('login') }}" class="nav-button">Login</a></li>
+{% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>{{ medicine.name }}</h1>
+        <div class="medicine-details">
+            <div class="medicine-info">
+                <h2>Details</h2>
+                <p><strong>Factory Name:</strong> {{ medicine.factory_name }}</p>
+                <p><strong>Manufacturing Date:</strong> {{ medicine.manufacturing_date.strftime('%d-%m-%Y') }}</p>
+                <p><strong>Expiry Date:</strong> {{ medicine.expiry_date.strftime('%d-%m-%Y') }}</p>
+                <p><strong>Uses:</strong> {{ medicine.uses }}</p>
             </div>
-        </main>
+            <div class="qr-section">
+                <h3>Scan QR Code</h3>
+                <img src="{{ url_for('static', filename=medicine.qr_code.split('static/')[-1]) }}" 
+                     alt="QR Code for {{ medicine.name }}" class="qr-code-img">
+            </div>
+        </div>
+    </main>
 
-        <footer>
-            <p>&copy; 2024 ProMed. All rights reserved.</p>
-        </footer>
-    </div>
+    <footer>
+        <p>&copy; 2025 ProMed. All Rights Reserved.</p>
+    </footer>
+
 </body>
 </html>

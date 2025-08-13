@@ -1,10 +1,25 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
+/* === FINAL & CORRECTED STYLESHEET (ALIGNMENT FIXED) === */
+
+/* General Styles - DIRECTLY FROM home.css */
+* {
     margin: 0;
     padding: 0;
-    background-color: #fffaf3;
-    color: #333;
+    box-sizing: border-box;
+}
+header {
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
@@ -12,176 +27,151 @@ body {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
-/* Navbar Styles */
-header {
-    background-color: #ff9f1c;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+/* Header & Navigation Bar - DIRECTLY FROM home.css */
 
-.navbar {
+
+header nav.container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
 }
 
-.logo a {
-    text-decoration: none;
-    color: #fff;
+.logo {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 700;
+    color: #ff5733;
+    text-decoration: none;
+    letter-spacing: 1px;
 }
 
-.nav-links {
+header nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
+    align-items: center;
+    gap: 40px;
 }
 
-.nav-links li {
-    margin: 0;
-}
-
-.nav-links a {
+header nav ul li a {
+    color: #e0e0e0;
     text-decoration: none;
-    color: #fff;
     font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-    background-color: #e68a00;
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: #ff7043;
 }
 
-/* Main Content Styles */
-main {
-    margin-top: 20px;
+.nav-button {
+    background-color: #ff7043;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #ff5733;
+}
+
+/* Main Content Area */
+main.container {
+    padding: 50px 0;
+}
+
+main h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
     text-align: center;
+    margin-bottom: 50px;
 }
 
-h1 {
-    color: #ff9f1c;
-    margin-bottom: 20px;
+.medicine-list {
+    list-style: none;
+    display: grid;
+    gap: 30px;
 }
 
-.medicine-details {
+.medicine-item {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 15px;
+    padding: 30px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.medicine-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px -10px rgba(255, 112, 67, 0.2);
 }
 
 .medicine-info {
     flex: 1;
-    min-width: 300px;
-    padding: 10px;
-    color: #555;
+}
+
+.medicine-info h2 {
+    font-size: 1.7rem;
+    color: #ff7043;
+    margin-bottom: 15px;
 }
 
 .medicine-info p {
-    margin: 10px 0;
-    font-size: 16px;
+    font-size: 1rem;
+    color: #bbb;
+    margin-bottom: 8px;
 }
 
 .medicine-info p strong {
-    color: #333;
+    color: #e0e0e0;
+    font-weight: 600;
 }
 
+
+/* --- FIX IS HERE --- */
 .qr-section {
-    flex: 1;
-    min-width: 300px;
-    text-align: center;
-    background-color: #fff7e6;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    /* This creates the vertical alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+/* --- END OF FIX --- */
 
-.qr-code-container h3 {
+.qr-section h3 {
+    font-size: 1.2rem;
     margin-bottom: 15px;
-    color: #333;
 }
 
 .qr-code-img {
-    max-width: 150px;
-    height: auto;
-    border: 2px solid #ff9f1c;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #ffffff;
-    margin-bottom: 20px;
-}
-
-.btn-container {
-    margin-top: 15px;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    margin: 0 auto 20px auto;
+    background-color: white;
+    padding: 5px;
 }
 
 .btn {
     display: inline-block;
-    background-color: #ff9f1c;
-    color: #fff;
+    background-color: #ff7043;
+    color: white;
     text-decoration: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #e68a00;
-    transform: translateY(-3px);
-}
-
-/* Footer Styles */
-footer {
-    margin-top: 30px;
-    text-align: center;
-    padding: 15px 0;
-    background-color: #ff9f1c;
-    color: #fff;
-    font-size: 14px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-    }
-
-    .nav-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .medicine-details {
-        flex-direction: column;
-    }
-
-    .qr-code-img {
-        max-width: 120px;
-    }
-
-    .btn {
-        padding: 10px 15px;
-        font-size: 14px;
-    }
+    background-color: #ff5733;
+    transform: scale(1.05);
 }

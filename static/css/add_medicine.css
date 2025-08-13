@@ -1,138 +1,169 @@
-/* Reset some basic styles */
+/* === STYLESHEET BUILT FROM YOUR home.css === */
+
+/* General Styles - DIRECTLY FROM home.css */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body and overall layout */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
-    color: #333;
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
     line-height: 1.6;
 }
 
-/* Container */
 .container {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
-/* Header */
+/* Header & Navigation Bar - DIRECTLY FROM home.css */
 header {
-    background-color: #ff6f61;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ff5733;
+    text-decoration: none;
+    letter-spacing: 1px;
 }
 
 header nav ul {
     list-style: none;
-    text-align: center;
-}
-
-header nav ul li {
-    display: inline;
-    margin: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
 }
 
 header nav ul li a {
-    color: white;
+    color: #e0e0e0;
     text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 500;
     transition: color 0.3s ease;
 }
 
-header nav ul li a:hover {
-    color: #ffe600;
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: #ff7043;
 }
 
-/* Main section */
-main {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.nav-button {
+    background-color: #ff7043;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
 }
 
-h1 {
-    color: #ff6f61;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 30px;
+.nav-button:hover {
+    background-color: #ff5733;
 }
 
-/* Form Styling */
-form {
+/* Main Content Area - ADAPTED FOR THIS PAGE */
+main.container {
+    padding: 50px 0;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+}
+
+main h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Form Styling - MATCHING YOUR THEME */
+form {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-radius: 15px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #bbb;
 }
 
 input, textarea {
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    margin-top: 5px;
-    transition: border-color 0.3s ease;
+    background-color: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    color: #e0e0e0;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus, textarea:focus {
-    border-color: #ff6f61;
     outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 10px -2px rgba(255, 112, 67, 0.5);
 }
 
 textarea {
     resize: vertical;
-    height: 150px;
+    min-height: 120px;
 }
 
-/* Button */
+/* Button style based on your .cta-button */
 button {
-    background-color: #ff6f61;
+    background-color: #ff7043;
     color: white;
-    padding: 15px;
-    font-size: 18px;
+    text-decoration: none;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    align-self: center; /* Center the button in the form */
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #e85c52;
+    background-color: #ff5733;
+    transform: scale(1.05);
 }
 
-/* Footer */
+/* Footer Styling */
 footer {
     text-align: center;
-    margin-top: 50px;
-    font-size: 14px;
+    padding: 40px 0;
     color: #777;
+    font-size: 0.9rem;
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    header nav ul li {
-        display: block;
-        margin: 10px 0;
-    }
-
-    .container {
-        width: 95%;
-    }
-
-    form {
-        width: 100%;
-    }
+/* --- NEW: Style for the date input's calendar icon --- */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    /* This filter inverts the default black color to white */
+    filter: invert(1); 
 }
