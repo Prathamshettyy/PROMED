@@ -1,51 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - ProMed</title>
+{% extends 'base.html' %}
+{% block title %}Sign Up - ProMed{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
-</head>
-<body>
-
-    <div class="signup-container">
-        <div class="signup-form fade-in-up">
-            <h2>Create Your Account</h2>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-            <form method="POST" action="{{ url_for('signup') }}">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>Create Your Account</h2>
+        <form method="POST" class="needs-validation" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="input-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" required class="form-control" 
+                       autocomplete="username" minlength="3" maxlength="100"
+                       placeholder="Choose a unique username">
+                <div class="invalid-feedback">
+                    Please provide a username (3-100 characters).
                 </div>
-                
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="btn-submit">Sign Up</button>
-            </form>
-            <div class="login-link">
-                <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
             </div>
+            
+            <div class="input-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required class="form-control" 
+                       autocomplete="email" maxlength="120"
+                       placeholder="your.email@example.com">
+                <div class="invalid-feedback">
+                    Please provide a valid email address.
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required class="form-control" 
+                       autocomplete="new-password" minlength="6"
+                       placeholder="At least 6 characters">
+                <div class="invalid-feedback">
+                    Please provide a password (at least 6 characters).
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+        
+        <div class="auth-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
         </div>
     </div>
+</div>
 
-</body>
-</html>
+<script>
+// Bootstrap form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Email validation
+document.getElementById('email').addEventListener('input', function() {
+    var email = this.value;
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (email && !emailRegex.test(email)) {
+        this.setCustomValidity('Please enter a valid email address');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}

@@ -1,44 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ProMed</title>
+{% extends 'base.html' %}
+{% block title %}Login - ProMed{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-form fade-in-up">
-            <h2>Login to ProMed</h2>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-
-            <form method="POST" action="{{ url_for('login') }}">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>Login to ProMed</h2>
+        <form method="POST" class="needs-validation" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="input-group">
+                <label for="login_input">Email *</label>
+                <input type="text" id="login_input" name="login_input" required class="form-control" 
+                       autocomplete="username" placeholder="Enter your email">
+                <div class="invalid-feedback">
+                    Please provide your email.
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="btn-submit">Login</button>
-            </form>
-            <div class="signup-link">
-                <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a></p>
             </div>
+            
+            <div class="input-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required class="form-control" 
+                       autocomplete="current-password" placeholder="Enter your password">
+                <div class="invalid-feedback">
+                    Please provide your password.
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+        
+        <div class="auth-link">
+            Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<script>
+// Bootstrap form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>
+{% endblock %}

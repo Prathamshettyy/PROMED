@@ -22,3 +22,4 @@ htmlcov/
 *.orig
 *.lock
 *.venv/
+venv/

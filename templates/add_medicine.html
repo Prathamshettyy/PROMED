@@ -1,60 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Medicine - ProMed</title>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_medicine.css') }}">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    
-    <header>
-        <nav class="container">
-            <a href="{{ url_for('home') }}" class="logo">ProMed</a>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('view_medicines') }}">View Medicines</a></li> 
-                <li><a href="{{ url_for('about_us') }}">About Us</a></li>
-                {% if session['user_id'] %}
-    <li><a href="{{ url_for('logout') }}" class="nav-button">Logout</a></li>
-{% else %}
-    <li><a href="{{ url_for('login') }}" class="nav-button">Login</a></li>
-{% endif %}
-            </ul>
-        </nav>
-    </header>
-    
-    <main class="container">
+{% extends 'base.html' %}
+{% block title %}Add Medicine - ProMed{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
         <h1>Add a New Medicine</h1>
-        <form method="POST" action="{{ url_for('add_medicine') }}">
+        <form method="POST" class="medicine-form needs-validation" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             
-            <label for="name">Medicine Name:</label>
-            <input type="text" id="name" name="name" required>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Medicine Name *</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid medicine name.
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="factory_name" class="form-label">Factory Name *</label>
+                    <input type="text" class="form-control" id="factory_name" name="factory_name" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid factory name.
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="manufacturing_date" class="form-label">Manufacturing Date *</label>
+                    <input type="date" class="form-control" id="manufacturing_date" name="manufacturing_date" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid manufacturing date.
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="expiry_date" class="form-label">Expiry Date *</label>
+                    <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid expiry date.
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <label for="uses" class="form-label">Uses *</label>
+                    <textarea class="form-control" id="uses" name="uses" rows="4" required placeholder="Describe the uses and dosage of this medicine..."></textarea>
+                    <div class="invalid-feedback">
+                        Please provide the uses of this medicine.
+                    </div>
+                </div>
+                
+                <div class="col-12 text-center">
+  <button type="submit" class="btn-submit">Add Medicine</button>
+  <a href="{{ url_for('view_medicines') }}" class="btn btn-secondary mt-4">Cancel</a>
+</div>
 
-            <label for="factory_name">Factory Name:</label>
-            <input type="text" id="factory_name" name="factory_name" required>
 
-            <label for="manufacturing_date">Manufacturing Date:</label>
-            <input type="date" id="manufacturing_date" name="manufacturing_date" required>
-
-            <label for="expiry_date">Expiry Date:</label>
-            <input type="date" id="expiry_date" name="expiry_date" required>
-
-            <label for="uses">Uses:</label>
-            <textarea id="uses" name="uses" required></textarea>
-
-            <button type="submit">Add Medicine</button>
+            </div>
         </form>
-    </main>
+    </div>
+</div>
 
-    <footer>
-        <p>&copy; 2025 ProMed. All Rights Reserved.</p>
-    </footer>
+<script>
+// Bootstrap form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 
-</body>
-</html>
+// Date validation
+document.getElementById('expiry_date').addEventListener('change', function() {
+    var mfgDate = document.getElementById('manufacturing_date').value;
+    var expDate = this.value;
+    
+    if (mfgDate && expDate && new Date(expDate) <= new Date(mfgDate)) {
+        this.setCustomValidity('Expiry date must be after manufacturing date');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+document.getElementById('manufacturing_date').addEventListener('change', function() {
+    var expDate = document.getElementById('expiry_date').value;
+    var mfgDate = this.value;
+    
+    if (mfgDate && expDate && new Date(expDate) <= new Date(mfgDate)) {
+        document.getElementById('expiry_date').setCustomValidity('Expiry date must be after manufacturing date');
+    } else {
+        document.getElementById('expiry_date').setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}
