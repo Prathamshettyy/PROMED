@@ -1,6 +1,16 @@
 import os, uuid, re
+import logging
 from datetime import datetime, date, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort
+
+# ───── Logger Setup ─────
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+handler.setFormatter(formatter)
+if not logger.hasHandlers():
+    logger.addHandler(handler)
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail, Message
@@ -75,45 +85,52 @@ os.makedirs(QR_FOLDER, exist_ok=True)
 
 # ───── Scheduled Job ─────
 def send_expiry_alerts():
-    tomorrow = date.today() + timedelta(days=1)
-    expiring_meds = Medicine.query.filter(
+    """Send expiry alerts both 24 hours before and on the day of expiry, only once for each case."""
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
+
+    # 1. Medicines expiring tomorrow (send 24h prior expiration, if not already sent)
+    expiring_tomorrow = Medicine.query.filter(
         Medicine.expiry_date == tomorrow,
-        Medicine.expiry_alert_sent == False
+        Medicine.expiry_alert_sent_prior == False
     ).all()
 
-    user_meds = {}
-    for med in expiring_meds:
-        user_meds.setdefault(med.user_id, []).append(med)
+    # 2. Medicines expiring today (send expiry day alert, if not already sent)
+    expiring_today = Medicine.query.filter(
+        Medicine.expiry_date == today,
+        Medicine.expiry_alert_sent_expiry_day == False
+    ).all()
 
-    for user_id, meds in user_meds.items():
-        user = User.query.get(user_id)
+    for med in expiring_tomorrow:
+        user = User.query.get(med.user_id)
         if not user or not user.email:
             continue
-
-        details = []
-        for m in meds:
-            details.append(
-                f"Name: {m.name}\n"
-                f"Factory: {m.factory_name}\n"
-                f"Manufactured: {m.manufacturing_date.strftime('%d-%m-%Y')}\n"
-                f"Expires: {m.expiry_date.strftime('%d-%m-%Y')}\n"
-                f"Uses: {m.uses}\n"
-            )
-
-        body = "The following medicine(s) will expire tomorrow:\n\n" + "\n".join(details)
-
+        body = f"Reminder: The following medicine will expire tomorrow:\n\nName: {med.name}\nExpiry Date: {med.expiry_date.strftime('%d-%m-%Y')}\n"
         try:
-            mail.send(Message(
-                subject="ProMed Medicine Expiry Alert",
-                recipients=[user.email],
-                body=body
-            ))
-            for m in meds:
-                m.expiry_alert_sent = True
+            msg = Message(subject="Medicine Expiry Reminder (24h Notice)",
+                          recipients=[user.email], body=body)
+            mail.send(msg)
+            med.expiry_alert_sent_prior = True
             db.session.commit()
-            print(f"Sent expiry alert email to {user.email}")
+            logger.info(f"24h prior expiry reminder sent to {user.email} for {med.name}")
         except Exception as e:
-            print(f"Failed to send email to {user.email}: {e}")
+            logger.error(f"Failed to send 24h prior alert: {e}")
+            db.session.rollback()
+
+    for med in expiring_today:
+        user = User.query.get(med.user_id)
+        if not user or not user.email:
+            continue
+        body = f"Alert: The following medicine has expired today:\n\nName: {med.name}\nExpiry Date: {med.expiry_date.strftime('%d-%m-%Y')}\n"
+        try:
+            msg = Message(subject="Medicine Expired Alert",
+                          recipients=[user.email], body=body)
+            mail.send(msg)
+            med.expiry_alert_sent_expiry_day = True
+            db.session.commit()
+            logger.info(f"Expiry day alert sent to {user.email} for {med.name}")
+        except Exception as e:
+            logger.error(f"Failed to send expiry day alert: {e}")
             db.session.rollback()
 
 # ───── Routes ─────

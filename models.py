@@ -18,3 +18,6 @@ class User(db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)  # Increased size for hashed password
     email = db.Column(db.String(120), unique=True, nullable=False)  # Added email field
+
+expiry_alert_sent_prior = db.Column(db.Boolean, default=False)  # Alert 24h prior
+expiry_alert_sent_expiry_day = db.Column(db.Boolean, default=False)  # Alert on expiry day
