@@ -1,0 +1,39 @@
+services:
+  # Web Service for the Flask App
+  - type: web
+    name: promed-web
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: promed-db
+          property: connectionString
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+
+  # PostgreSQL Database
+  - type: psql
+    name: promed-db
+    plan: free # Or your preferred plan
+
+  # Background Worker for sending emails
+  - type: worker
+    name: promed-scheduler
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python -c 'from app import app, scheduler; scheduler.init_app(app); scheduler.start()'"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: promed-db
+          property: connectionString
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
