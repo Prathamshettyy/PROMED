@@ -186,6 +186,20 @@ def send_expiry_alerts():
             db.session.rollback()
 
 # ───── Routes ─────
+@app.before_first_request
+def create_tables():
+    db.create_all()
+    print("Database tables created on first request")
+
+@app.route('/init-db')
+def init_database():
+    try:
+        db.create_all()
+        return "Database tables created successfully!"
+    except Exception as e:
+        return f"Error creating database: {str(e)}"
+
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -450,6 +464,7 @@ def init_db():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        print("Database tables created/verified")
         validate_mail_config()
 
         scheduler.init_app(app)

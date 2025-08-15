@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 Server Error - ProMed</title>
+    <title>403 Forbidden - ProMed</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>500 - Server Error</h1>
-        <p>Something went wrong on our end. Please try again later.</p>
+        <h1>403 - Access Forbidden</h1>
+        <p>You don't have permission to access this resource.</p>
         <a href="{{ url_for('home') }}" class="btn">Go Home</a>
     </div>
 </body>
