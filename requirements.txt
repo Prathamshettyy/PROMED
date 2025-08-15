@@ -3,6 +3,7 @@ Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.1.1
 Flask-Mail==0.10.0
 Flask-APScheduler==1.13.1
+gunicorn
 Werkzeug==2.3.7
 pyqrcode==1.2.1
 pypng==0.20220715.0
