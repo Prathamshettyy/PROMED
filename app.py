@@ -66,6 +66,14 @@ class Medicine(db.Model):
     expiry_alert_sent_expiry_day = db.Column(db.Boolean, default=False)  # Alert on expiry day
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+# Database initialization (FIXED: Replaced @app.before_first_request)
+try:
+    with app.app_context():
+        db.create_all()
+        print("Database tables initialized successfully")
+except Exception as e:
+    print(f"Database initialization error: {e}")
+
 # ───── Helpers ─────
 def login_required(fn):
     @wraps(fn)
@@ -186,11 +194,6 @@ def send_expiry_alerts():
             db.session.rollback()
 
 # ───── Routes ─────
-@app.before_first_request
-def create_tables():
-    db.create_all()
-    print("Database tables created on first request")
-
 @app.route('/init-db')
 def init_database():
     try:
@@ -198,7 +201,6 @@ def init_database():
         return "Database tables created successfully!"
     except Exception as e:
         return f"Error creating database: {str(e)}"
-
 
 @app.route('/')
 def home():
