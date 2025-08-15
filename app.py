@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from functools import wraps
 from flask_apscheduler import APScheduler
 import urllib.parse
+from flask_migrate import Migrate # <--- IMPORT MIGRATE
 
 # ───── Load environment variables ─────
 load_dotenv()
@@ -31,7 +32,6 @@ app.config['WTF_CSRF_ENABLED'] = True
 # --- Database Configuration ---
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    # Heroku/Render compatibility fix
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///promed.db'
@@ -49,9 +49,11 @@ app.config['SCHEDULER_API_ENABLED'] = True
 
 # ───── Extensions ─────
 db = SQLAlchemy(app)
+migrate = Migrate(app, db) # <--- INITIALIZE MIGRATE
 csrf = CSRFProtect(app)
 mail = Mail(app)
 scheduler = APScheduler()
+
 
 # ───── Models ─────
 class User(db.Model):
