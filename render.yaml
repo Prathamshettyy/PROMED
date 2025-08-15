@@ -3,7 +3,6 @@ services:
   - type: web
     name: promed-web
     env: python
-    # UPDATED: Run database migrations before starting the server
     buildCommand: "pip install -r requirements.txt; flask db upgrade"
     startCommand: "gunicorn app:app"
     envVars:
@@ -21,7 +20,7 @@ services:
         sync: false
 
   # PostgreSQL Database
-  - type: psql
+  - type: postgres # <-- CORRECTED from 'psql'
     name: promed-db
     plan: free
 
