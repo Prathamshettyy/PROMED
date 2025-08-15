@@ -20,7 +20,7 @@ services:
         sync: false
 
   # PostgreSQL Database
-  - type: postgres # <-- CORRECTED from 'psql'
+  - type: psql # <-- CORRECTED back to 'psql'
     name: promed-db
     plan: free
 
