@@ -491,7 +491,7 @@ if __name__ == '__main__':
             id='expiry_alerts_daily',
             func=wrapped_send,
             trigger='cron',
-            hour=7,
+            hour=13,
             minute=0
         )
 
