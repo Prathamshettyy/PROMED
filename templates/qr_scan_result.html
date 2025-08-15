@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %}Medicine Information - ProMed{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4><i class="fas fa-qrcode"></i> QR Code Scanned Successfully</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-pills fa-3x text-primary mb-3"></i>
+                        <h2 class="text-primary">{{ medicine.name }}</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-card mb-3">
+                                <div class="info-label">
+                                    <i class="fas fa-industry"></i> Factory Name
+                                </div>
+                                <div class="info-value">{{ medicine.factory_name }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="info-card mb-3">
+                                <div class="info-label">
+                                    <i class="fas fa-calendar-plus"></i> Manufacturing Date
+                                </div>
+                                <div class="info-value">{{ medicine.manufacturing_date }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-card mb-3">
+                                <div class="info-label">
+                                    <i class="fas fa-calendar-times"></i> Expiry Date
+                                </div>
+                                <div class="info-value expiry-date">{{ medicine.expiry_date }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="expiry-status mb-3">
+                                <div class="info-label">
+                                    <i class="fas fa-exclamation-triangle"></i> Status
+                                </div>
+                                <div id="expiry-status-value" class="info-value"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="uses-section">
+                        <div class="info-label">
+                            <i class="fas fa-notes-medical"></i> Uses & Description
+                        </div>
+                        <div class="info-value uses-text">{{ medicine.uses }}</div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button onclick="window.history.back()" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </button>
+                        <button onclick="printMedicineInfo()" class="btn btn-primary ml-2">
+                            <i class="fas fa-print"></i> Print Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.info-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.info-value {
+    font-size: 1.1em;
+    color: #333;
+    word-wrap: break-word;
+}
+
+.uses-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    margin-top: 15px;
+}
+
+.uses-text {
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.expiry-date {
+    font-weight: bold;
+}
+
+.status-expired {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.status-expiring-soon {
+    color: #fd7e14;
+    font-weight: bold;
+}
+
+.status-valid {
+    color: #28a745;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .info-card {
+        padding: 10px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    checkExpiryStatus();
+});
+
+function checkExpiryStatus() {
+    const expiryDateStr = '{{ medicine.expiry_date }}';
+    const expiryDate = new Date(expiryDateStr);
+    const today = new Date();
+    const timeDiff = expiryDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    const statusElement = document.getElementById('expiry-status-value');
+    
+    if (daysDiff < 0) {
+        statusElement.innerHTML = '<i class="fas fa-times-circle"></i> EXPIRED';
+        statusElement.className = 'info-value status-expired';
+    } else if (daysDiff <= 7) {
+        statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> EXPIRING SOON';
+        statusElement.className = 'info-value status-expiring-soon';
+    } else {
+        statusElement.innerHTML = '<i class="fas fa-check-circle"></i> VALID';
+        statusElement.className = 'info-value status-valid';
+    }
+}
+
+function printMedicineInfo() {
+    window.print();
+}
+</script>
+{% endblock %}
