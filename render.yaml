@@ -3,9 +3,12 @@ services:
   - type: web
     name: promed-web
     env: python
-    buildCommand: "pip install -r requirements.txt"
+    # UPDATED: Run database migrations before starting the server
+    buildCommand: "pip install -r requirements.txt; flask db upgrade"
     startCommand: "gunicorn app:app"
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
@@ -20,7 +23,7 @@ services:
   # PostgreSQL Database
   - type: psql
     name: promed-db
-    plan: free # Or your preferred plan
+    plan: free
 
   # Background Worker for sending emails
   - type: worker
@@ -29,6 +32,8 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python -c 'from app import app, scheduler; scheduler.init_app(app); scheduler.start()'"
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
       - key: DATABASE_URL
         fromDatabase:
           name: promed-db
