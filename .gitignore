@@ -1,27 +1,96 @@
+# ProMed Flask Application .gitignore
+
+# Environment Variables
 .env
-__pycache__/
-*.pyc
-*.pyo
-*.log
-*.sqlite3
+.env.local
+.env.development
+.env.production
+
+# Database files
 *.db
-.DS_Store
-node_modules/
-dist/
+*.sqlite
+*.sqlite3
+promed.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+promed-env/
+
+# Flask
+instance/
+.webassets-cache
+
+# IDE
 .vscode/
 .idea/
-*.bak
 *.swp
-*.tmp
-.env.*
-.envrc
-coverage/
-htmlcov/
-.cache/
-*.orig
-*.lock
-*.venv/
-venv/
-env
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# QR Codes (optional - remove this line if you want to commit QR codes)
+static/qrcodes/*.png
+
+# Migration files (optional - uncomment if you don't want to commit migrations)
+# migrations/
+
+# Backup files
+*.backup
+models_backup.py
+
+# Test files
+test_output/
+test_results/
+
+# Email templates (if any)
+email_templates/
+
+# Certificates
+*.pem
+*.key
+*.crt
+
+# Configuration backups
+.env.backup
+config.backup
