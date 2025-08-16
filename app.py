@@ -30,10 +30,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WTF_CSRF_ENABLED'] = True
 
 # --- Database Configuration ---
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+# app.py
+
+# --- Database Configuration (for both local and production) ---
+if 'PYTHONANYWHERE_USERNAME' in os.environ:
+    # Code is running on PythonAnywhere, use MySQL
+    username = 'prathamshetty'
+    password = 'PromedPratham'  # The password you set for the database
+    hostname = 'prathamshetty.mysql.pythonanywhere-services.com'
+    databasename = 'prathamshetty$default'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}'
 else:
+    # Code is running locally, use a local SQLite file
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///promed.db'
 
 # --- Mail Configuration ---
@@ -71,7 +79,7 @@ class Medicine(db.Model):
     expiry_date = db.Column(db.Date, nullable=False)
     uses = db.Column(db.Text, nullable=False)
     qr_code = db.Column(db.String(260), nullable=False)
-    
+
     expiry_alert_sent_prior = db.Column(db.Boolean, default=False)
     expiry_alert_sent_expiry_day = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -96,30 +104,31 @@ os.makedirs(QR_FOLDER, exist_ok=True)
 def send_expiry_alerts():
     with app.app_context():
         logger.info("Starting expiry alerts check...")
-        
+
         today = date.today()
         tomorrow = today + timedelta(days=1)
-        
+
         warning_meds = Medicine.query.filter(
             Medicine.expiry_date == tomorrow,
             Medicine.expiry_alert_sent_prior == False
         ).all()
-        
+
         expired_meds = Medicine.query.filter(
             Medicine.expiry_date == today,
             Medicine.expiry_alert_sent_expiry_day == False
         ).all()
-        
+
         logger.info(f"Found {len(warning_meds)} medicines expiring tomorrow, {len(expired_meds)} expired today")
-        
+
         for med in warning_meds:
             user = User.query.get(med.user_id)
             if user and user.email:
                 try:
                     msg = Message(
-                        subject="ProMed – Medicine Will Expire Tomorrow",
-                        recipients=[user.email],
-                        body=f"Reminder: '{med.name}' from {med.factory_name} will expire on {med.expiry_date.strftime('%d-%m-%Y')}."
+                    subject="ProMed – Medicine Will Expire Tomorrow",
+                    sender=app.config['MAIL_USERNAME'],  # <-- ADD THIS LINE
+                    recipients=[user.email],
+                    body=f"Reminder: '{med.name}' from {med.factory_name} will expire on {med.expiry_date.strftime('%d-%m-%Y')}."
                     )
                     mail.send(msg)
                     med.expiry_alert_sent_prior = True
@@ -134,9 +143,10 @@ def send_expiry_alerts():
             if user and user.email:
                 try:
                     msg = Message(
-                        subject="ProMed – Medicine Has Expired",
-                        recipients=[user.email],
-                        body=f"Alert: '{med.name}' from {med.factory_name} has expired today ({med.expiry_date.strftime('%d-%m-%Y')})."
+                    subject="ProMed – Medicine Has Expired",
+                    sender=app.config['MAIL_USERNAME'],  # <-- ADD THIS LINE
+                    recipients=[user.email],
+                    body=f"Alert: '{med.name}' from {med.factory_name} has expired today ({med.expiry_date.strftime('%d-%m-%Y')})."
                     )
                     mail.send(msg)
                     med.expiry_alert_sent_expiry_day = True
@@ -177,7 +187,7 @@ def signup():
             db.session.commit()
             flash('Account created! Please log in.', 'success')
             return redirect(url_for('login'))
-        
+
         return render_template('signup.html')
     return render_template('signup.html')
 
@@ -197,7 +207,7 @@ def login():
             return redirect(url_for('view_medicines'))
         else:
             flash('Invalid credentials.', 'danger')
-            
+
     return render_template('login.html')
 
 @app.route('/logout')
@@ -228,9 +238,9 @@ def add_medicine():
                 else:
                     filename = f"{uuid.uuid4().hex}.png"
                     file_path = os.path.join(QR_FOLDER, filename)
-                    
+
                     medicine_url = url_for('qr_scan_handler', name=name, factory=factory_name, mfg=mfg_date, exp=expiry_date, uses=uses, _external=True)
-                    
+
                     pyqrcode.create(medicine_url).png(file_path, scale=6)
 
                     new_medicine = Medicine(
@@ -272,7 +282,7 @@ def delete_medicine(medicine_id):
     medicine = Medicine.query.get_or_404(medicine_id)
     if medicine.user_id != session['user_id']:
         abort(403)
-    
+
     try:
         if os.path.exists(medicine.qr_code):
             os.remove(medicine.qr_code)
@@ -283,7 +293,7 @@ def delete_medicine(medicine_id):
         db.session.rollback()
         logger.error(f"Error deleting medicine: {e}")
         flash('Error deleting medicine.', 'danger')
-        
+
     return redirect(url_for('view_medicines'))
 
 @app.route('/qr-scan')
@@ -323,9 +333,9 @@ def init_db_command():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    
+
     scheduler.init_app(app)
     scheduler.add_job(id='send_expiry_alerts_job', func=send_expiry_alerts, trigger='cron', hour=8)
     scheduler.start()
-    
+
     app.run(debug=True)

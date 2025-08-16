@@ -504,6 +504,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     max-width: 900px;
     margin: 50px auto;
     text-align: center;
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.about-section:hover {
+    box-shadow: 0 20px 40px -10px rgba(255, 112, 67, 0.25);
+    transform: translateY(-10px) scale(1.03);
 }
 
 .about-section h1 {
@@ -732,3 +738,68 @@ input, textarea, select {
   margin-left: 1rem;  /* adds 16px spacing */
 }
 
+/* static/css/main.css */
+
+/* ----- Team Section Styles ----- */
+.team-section {
+    padding: 20px 0;
+    background-color: #1e1e1e; 
+}
+
+.team-item {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.team-item .team-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px auto;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.team-item h4 {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #948e8e;
+    font-size: 1.4rem;
+}
+
+.team-item p {
+    color: #6c757d;
+}
+
+/* ----- Footer Contributor Styles ----- */
+.footer-contributors {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5px;
+    gap: 8px;
+}
+
+.footer-contributors h5 {
+    font-size: 0.85rem;
+    color: #adb5bd;
+    margin: 0;
+    padding-right: 6px;
+    white-space: nowrap;
+}
+
+.contributor-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 2px;
+    border: 2px solid #6c757d;
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+}
+
+.contributor-img:hover {
+    transform: scale(1.08);
+    border-color: #fff;
+}
