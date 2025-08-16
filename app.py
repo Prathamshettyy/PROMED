@@ -34,14 +34,14 @@ app.config['WTF_CSRF_ENABLED'] = True
 
 # --- Database Configuration (for both local and production) ---
 if 'PYTHONANYWHERE_USERNAME' in os.environ:
-    # Code is running on PythonAnywhere, use MySQL
-    username = 'prathamshetty'
-    password = 'PromedPratham'  # The password you set for the database
-    hostname = 'prathamshetty.mysql.pythonanywhere-services.com'
-    databasename = 'prathamshetty$default'
+    # Use MySQL on PythonAnywhere, credentials from environment variables
+    username = os.getenv('MYSQL_USERNAME')
+    password = os.getenv('MYSQL_PASSWORD')
+    hostname = os.getenv('MYSQL_HOST')
+    databasename = os.getenv('MYSQL_DBNAME')
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}'
 else:
-    # Code is running locally, use a local SQLite file
+    # Use local SQLite file
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///promed.db'
 
 # --- Mail Configuration ---
