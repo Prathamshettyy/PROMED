@@ -1,168 +1,221 @@
-# **ProMed: Medicine Information Management System**
+# ProMed: Medicine Information Management System
 
-ProMed is a web application designed to manage and retrieve information about medicines using QR codes and NFC tags. The system allows users to add, view, and track medicine details, including expiry and manufacturing dates.
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)  [![Flask](https://img.shields.io/badge/flask-3.1.1-green.svg)](https://flask.palletsprojects.com/)  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  [![Deployment](https://img.shields.io/badge/deployment-PythonAnywhere-brightgreen.svg)](https://www.pythonanywhere.com/)
 
+ProMed is a web application that enables healthcare providers and individuals to record, retrieve and monitor medicine information using QR codes. The platform supports multi-user accounts, automated e-mail alerts for expiring medicines and a production-ready deployment configuration for PythonAnywhere.
 
 ![ProMed Project Banner](https://github.com/aaronfernandes21/PROMED/blob/master/static/images/project-banner.png)
+---
 
+## Table of Contents
+1. [Key Features](#key-features)
+2. [Technology Stack](#technology-stack)
+3. [Installation](#installation)
+4. [PythonAnywhere Deployment](#pythonanywhere-deployment)
+5. [Configuration](#configuration)
+6. [Usage Guide](#usage-guide)
+7. [API End-Points](#api-end-points)
+8. [Project Structure](#project-structure)
+9. [Troubleshooting](#troubleshooting)
+10. [Contributing](#contributing)
+11. [License](#license)
+12. [Roadmap / Future Enhancements](#roadmap--future-enhancements)
 
 ---
 
-## **Features**
-- **Home Screen**:
-  - Introduction to the service with options: Medicine Details, Add Medicine, and About Us.
-- **Add Medicine**:
-  - Add medicine details such as name, factory name, manufacturing date, expiry date, and uses.
-  - Generate unique QR codes for each medicine.
-- **Medicine Details**:
-  - View detailed information about each medicine by scanning a QR code or NFC tag.
-- **About Us**:
-  - Overview of the application and its features.
+## Key Features
+
+| Category | Description |
+|----------|-------------|
+| Medicine Management | Add, view and delete medicines with full validation and UUID-based QR code generation |
+| QR Code Support | Automatic PNG QR code created for every medicine; scanning opens a public detail page |
+| Expiry Monitoring | Visual traffic-light indicators (valid / expiring soon / expired) and daily e-mail notifications |
+| Secure Authentication | Password hashing, CSRF protection, session management and custom error pages |
+| Multi-User Isolation | Each user maintains a private medicine inventory |
+| Production Deployment | Configuration scripts and instructions tailored for PythonAnywhere (MySQL database) |
+| Automated Tasks | APScheduler triggers e-mail alerts once per day via a PythonAnywhere scheduled job |
 
 ---
 
-## **Technologies Used**
-- **Backend**: Flask (Python)
-- **Database**: SQLite
-- **Frontend**: HTML, CSS (No React)
-- **QR Code Generation**: PyQRCode library
-- **NFC Tag Support**: External hardware integration (optional)
+## Technology Stack
+
+| Layer | Technology |
+|-------|------------|
+| Backend Framework | Flask 3.1.1 |
+| ORM / Database | SQLAlchemy 3.1.1 · Flask-SQLAlchemy · SQLite (development) · MySQL (production) |
+| Migrations | Flask-Migrate 4.1.0 |
+| Templating | Jinja2 with Bootstrap-based layout |
+| Static Assets | Custom CSS (only **main.css**) · JavaScript (home.js) |
+| QR Code Generation | PyQRCode + Pillow |
+| Mail Service | Flask-Mail with Gmail SMTP |
+| Task Scheduling | APScheduler |
 
 ---
 
-## **Installation and Setup**
+## Installation
+
 ### Prerequisites
-- Python 3.8+
-- pip (Python package manager)
-- SQLite installed
+* Python 3.8 or higher
+* pip (Python package manager)
+* Git (optional but recommended)
 
-### Steps
-1. **Clone the Repository**:
+### Local Setup
+```bash
+# Clone repository
+$ git clone https://github.com/yourusername/ProMed.git
+$ cd ProMed
+
+# Create virtual environment
+$ python -m venv venv
+$ source venv/bin/activate   # Windows: venv\Scripts\activate
+
+# Install dependencies
+(venv) $ pip install -r requirements.txt
+
+# Create an environment file (.env) – see Configuration section
+
+# Initialise database (SQLite by default)
+(venv) $ flask db init
+(venv) $ flask db migrate -m "Initial schema"
+(venv) $ flask db upgrade
+
+# Run application
+(venv) $ python app.py
+```
+Application is reachable at `http://127.0.0.1:5000/`.
+
+---
+
+## PythonAnywhere Deployment
+This project is optimised for PythonAnywhere. The steps below assume a paid “Hacker” plan (required for MySQL and scheduled tasks).
+
+1. **Clone and prepare the project** on the PythonAnywhere Bash console:
    ```bash
-   git clone https://github.com/yourusername/ProMed.git
-   cd ProMed
+   $ git clone https://github.com/yourusername/ProMed.git ~/ProMed
+   $ cd ~/ProMed
+   $ python -m venv promed-env
+   $ source promed-env/bin/activate
+   (promed-env) $ pip install -r requirements.txt
    ```
-
-2. **Install Dependencies**:
+2. **Create MySQL database** via the PythonAnywhere *Databases* tab. Use name `yourusername$promed`.
+3. **Generate the `.env` file**:
    ```bash
-   pip install -r requirements.txt
+   (promed-env) $ python setup_env.py   # Follow interactive prompts
+   (promed-env) $ flask db upgrade
    ```
-
-3. **Set Up the Database**:
-   - Run the following commands in Python to initialize the database:
+4. **Configure the web application** (Web tab):
+   * Working directory: `/home/yourusername/ProMed`
+   * WSGI file:
      ```python
-     from app import db
-     db.create_all()
+     import sys, os
+     path = '/home/yourusername/ProMed'
+     if path not in sys.path:
+         sys.path.append(path)
+     from app import app as application
+     os.environ['PYTHONANYWHERE_USERNAME'] = 'yourusername'
      ```
-
-4. **Run the Application**:
+   * Virtualenv: `/home/yourusername/.virtualenvs/promed-env`
+   * Static files: URL `/static/` → `/home/yourusername/ProMed/static/`
+5. **Set up daily e-mail alert task** (Tasks tab):
    ```bash
-   flask run
+   /home/yourusername/.virtualenvs/promed-env/bin/python /home/yourusername/ProMed/check_users.py
    ```
-   The application will be accessible at `http://127.0.0.1:5000/`.
-
-5. **Access the Application**:
-   - Navigate to the home page and start exploring the features.
+6. **Reload** the web app from the dashboard.
 
 ---
 
-## **Deployment**
-### Using Tunneling with Cloudflared
-1. Install Cloudflared:
-   ```bash
-   npm install -g cloudflared
-   ```
-2. Run the Flask application locally:
-   ```bash
-   flask run
-   ```
-3. Start the Cloudflared tunnel:
-   ```bash
-   cloudflared tunnel --url http://127.0.0.1:5000
-   ```
-   This will generate a public URL that you can share to access your application.
+## Configuration
+Create a `.env` file in the project root. Example:
+```ini
+# Security
+SECRET_KEY=s3cure-r@ndom-key
 
-### Other Deployment Options
-The project can also be deployed on cloud platforms such as:
-- **Heroku**
-- **PythonAnywhere**
-- **Google Cloud**
+# MySQL (PythonAnywhere)
+MYSQL_USERNAME=yourusername
+MYSQL_PASSWORD=your-mysql-password
+MYSQL_HOST=yourusername.mysql.pythonanywhere-services.com
+MYSQL_DBNAME=yourusername$promed
+PYTHONANYWHERE_USERNAME=yourusername
+PYTHONANYWHERE_DOMAIN=pythonanywhere.com
 
-Ensure all dependencies and database configurations are updated in the deployment environment.
-
----
-
-## **Usage**
-1. **Add Medicine**:
-   - Navigate to the "Add Medicine" page, fill out the form, and submit the details.
-   - A QR code will be generated and stored in the `/static/qrcodes` folder.
-
-2. **View Medicine Details**:
-   - Scan the QR code with a compatible scanner or navigate to the "Medicine Details" page to view all medicines.
-
-3. **About Us**:
-   - Learn about the application's features and functionalities.
-
----
-
-## **Project Structure**
+# Gmail SMTP (expiry alerts)
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-gmail-app-password
 ```
-ProMed/
+Ensure `.env` is **never committed** (it is listed in `.gitignore`).
+
+---
+
+## Usage Guide
+1. **Register** a new account via *Sign Up*.
+2. **Log In** and navigate to *Add Medicine*.
+3. Fill in medicine details – a QR code is generated automatically.
+4. Use *View Medicines* to monitor inventory and status colour codes.
+5. The scheduler dispatches e-mails 24 hours before expiry and on the expiry day.
+
+---
+
+## API End-Points
+| Method | URL | Description | Auth |
+|--------|-----|-------------|------|
+| GET | `/` | Home page | – |
+| GET | `/about_us` | About page | – |
+| GET / POST | `/signup` | Register user | – |
+| GET / POST | `/login` | User login | – |
+| GET | `/logout` | Log out | ✓ |
+| GET | `/medicines` | User inventory | ✓ |
+| GET / POST | `/add-medicine` | Add medicine | ✓ |
+| GET | `/medicine/<id>` | Detail view | ✓ |
+| POST | `/medicine/<id>/delete` | Delete medicine | ✓ |
+| GET | `/qr-scan` | Display data from scanned QR code | – |
+
+---
+
+## Project Structure
+```
+PROMED/
+├── app.py               # Main Flask application
+├── check_users.py       # Daily expiry alert script
+├── setup_env.py         # Interactive .env generator for PythonAnywhere
+├── test_db.py           # Database diagnostics script
+├── migrations/          # Alembic migration history
 ├── static/
-│   ├── css/               # CSS files for styling
-│   │   ├── aboutus.css
-│   │   ├── addmedicine.css
-│   │   ├── home.css
-│   │   ├── login.css
-│   │   ├── medicinedetails.css
-│   │   ├── signup.css
-│   │   └── viewmedicine.css
-│   ├── qrcodes/           # Folder to store QR codes (PNG format)
-├── templates/             # HTML templates
-│   ├── aboutus.html
-│   ├── addmedicine.html
-│   ├── home.html
-│   ├── login.html
-│   ├── medicinedetails.html
-│   ├── signup.html
-│   └── viewmedicine.html
-├── app.py                 # Main Flask application
-├── check_users.py         # Script to check user-related operations
-├── models.py              # Database models
-├── promed.db              # SQLite database file
-├── requirements.txt       # List of dependencies
-└── README.md              # Project documentation
+│   ├── css/main.css     # Sole active style sheet
+│   ├── js/home.js       # Front-page JavaScript
+│   ├── images/          # Static images
+│   └── qrcodes/         # Generated QR PNG files
+├── templates/           # Jinja2 templates
+│   └── ...              # base.html, home.html, etc.
+├── requirements.txt     # Python dependencies
+├── .gitignore           # Version-control exclusions
+└── README.md            # Project documentation
 ```
 
 ---
 
-## **Contributing**
-We welcome contributions! Follow these steps to contribute:
+## Troubleshooting
+* **Database connection** – run `python test_db.py --production` on PythonAnywhere.
+* **E-mail failures** – verify Gmail app password and 2-FA settings.
+* **Static files** – ensure `/static/` mapping in Web tab matches filesystem path.
+* **Scheduler issues** – check task logs on PythonAnywhere if e-mails are not sent.
+
+---
+
+## Contributing
 1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-branch
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m "Add new feature"
-   ```
-4. Push to your branch:
-   ```bash
-   git push origin feature-branch
-   ```
-5. Open a pull request.
+2. Create a feature branch: `git checkout -b feature/my-feature`.
+3. Follow PEP 8 and add unit tests where appropriate.
+4. Commit with conventional messages and open a pull request.
 
 ---
 
-## **License**
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## License
+This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## **Acknowledgments**
-- Flask documentation for its excellent guides.
-- PyQRCode library for seamless QR code generation.
-
-Feel free to customize the content, especially URLs and project details, as needed!
-
+## Roadmap / Future Enhancements
+* **Web NFC Support** – planned addition of optional NFC tag reading/writing using the Web NFC API for supported Android devices. QR codes will remain fully supported as a fallback.
+* **Role-based Access Control** – introduce admin and pharmacist roles for broader workflows.
+* **REST API** – expose JSON endpoints for integration with external systems.
+* **Search and Filtering** – advanced filtering by medicine name, factory and expiry range.
