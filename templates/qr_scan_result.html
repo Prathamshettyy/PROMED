@@ -1,72 +1,65 @@
 {% extends 'base.html' %}
 {% block title %}Medicine Information - ProMed{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4><i class="fas fa-qrcode"></i> QR Code Scanned Successfully</h4>
-                </div>
-                <div class="card-body">
+        <div class="col-lg-8 col-md-10">
+            <div class="qr-card medicine-item shadow-lg rounded-4 border-0">
+                <div class="medicine-info">
                     <div class="text-center mb-4">
-                        <i class="fas fa-pills fa-3x text-primary mb-3"></i>
-                        <h2 class="text-primary">{{ medicine.name }}</h2>
+                        <div class="qr-header-icon mb-3">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4 class="qr-success-text mb-2">QR Code Scanned Successfully</h4>
+                        <h2 class="medicine-name">{{ medicine.name }}</h2>
                     </div>
-                    
-                    <div class="row">
+                    <div class="row g-4 mb-3">
                         <div class="col-md-6">
-                            <div class="info-card mb-3">
+                            <div class="info-block">
                                 <div class="info-label">
-                                    <i class="fas fa-industry"></i> Factory Name
+                                    <i class="fas fa-industry me-1"></i> Factory Name
                                 </div>
                                 <div class="info-value">{{ medicine.factory_name }}</div>
                             </div>
                         </div>
-                        
                         <div class="col-md-6">
-                            <div class="info-card mb-3">
+                            <div class="info-block">
                                 <div class="info-label">
-                                    <i class="fas fa-calendar-plus"></i> Manufacturing Date
+                                    <i class="fas fa-calendar-plus me-1"></i> Manufacturing Date
                                 </div>
                                 <div class="info-value">{{ medicine.manufacturing_date }}</div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="row">
+                    <div class="row g-4 mb-3">
                         <div class="col-md-6">
-                            <div class="info-card mb-3">
+                            <div class="info-block">
                                 <div class="info-label">
-                                    <i class="fas fa-calendar-times"></i> Expiry Date
+                                    <i class="fas fa-calendar-times me-1"></i> Expiry Date
                                 </div>
                                 <div class="info-value expiry-date">{{ medicine.expiry_date }}</div>
                             </div>
                         </div>
-                        
                         <div class="col-md-6">
-                            <div class="expiry-status mb-3">
+                            <div class="info-block">
                                 <div class="info-label">
-                                    <i class="fas fa-exclamation-triangle"></i> Status
+                                    <i class="fas fa-exclamation-triangle me-1"></i> Status
                                 </div>
                                 <div id="expiry-status-value" class="info-value"></div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="uses-section">
+                    <div class="info-block mb-4">
                         <div class="info-label">
-                            <i class="fas fa-notes-medical"></i> Uses & Description
+                            <i class="fas fa-notes-medical me-1"></i> Uses & Description
                         </div>
                         <div class="info-value uses-text">{{ medicine.uses }}</div>
                     </div>
-                    
                     <div class="text-center mt-4">
-                        <button onclick="window.history.back()" class="btn btn-secondary">
+                        <a href="{{ url_for('view_medicines') }}" class="btn btn-secondary me-3">
                             <i class="fas fa-arrow-left"></i> Go Back
-                        </button>
-                        <button onclick="printMedicineInfo()" class="btn btn-primary ml-2">
+                        </a>
+                        <button type="button" class="btn btn-primary" onclick="printMedicineInfo();">
                             <i class="fas fa-print"></i> Print Info
                         </button>
                     </div>
@@ -77,96 +70,198 @@
 </div>
 
 <style>
-.info-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f8f9fa;
+/* QR Code Page - Matching Application Theme */
+.qr-card {
+    background: #1e1e1e !important;
+    border: 1px solid #2a2a2a !important;
+    border-radius: 15px !important;
+    padding: 40px !important;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.qr-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px -10px rgba(255, 112, 67, 0.2) !important;
+}
+
+.qr-header-icon {
+    font-size: 2.5rem;
+    color: #ff7043;
+}
+
+.qr-success-text {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.medicine-name {
+    color: #ff7043 !important;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.info-block {
+    background: #343434;
+    border: 1px solid #100f0f;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.info-block:hover {
+    border-color: #ff7043;
+    box-shadow: 0 2px 12px rgba(255, 112, 67, 0.15);
 }
 
 .info-label {
-    font-weight: bold;
-    color: #6c757d;
-    margin-bottom: 5px;
-    font-size: 0.9em;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #bbb;
+    margin-bottom: 8px;
 }
 
 .info-value {
-    font-size: 1.1em;
-    color: #333;
-    word-wrap: break-word;
-}
-
-.uses-section {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    margin-top: 15px;
-}
-
-.uses-text {
-    line-height: 1.5;
-    white-space: pre-wrap;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
 }
 
 .expiry-date {
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
+.uses-text {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* Status styling matching theme */
 .status-expired {
-    color: #dc3545;
-    font-weight: bold;
+    color: #fc0202 !important;
+    background: rgba(130, 1, 1, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 .status-expiring-soon {
-    color: #fd7e14;
-    font-weight: bold;
+    color: #ffa726 !important;
+    background: rgba(255, 167, 38, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 167, 38, 0.3);
 }
 
 .status-valid {
-    color: #28a745;
-    font-weight: bold;
+    color: #66bb6a !important;
+    background: rgba(102, 187, 106, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid rgba(102, 187, 106, 0.3);
 }
 
+/* Button styling matching application theme */
+.btn {
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: #ff7043 !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #ff5733 !important;
+    transform: scale(1.05);
+    color: white !important;
+}
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62 !important;
+    color: white !important;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .container {
-        padding: 10px;
+    .qr-card {
+        padding: 30px 20px !important;
+        margin: 20px !important;
     }
     
-    .card-body {
+    .medicine-name {
+        font-size: 1.6rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .me-3 {
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .info-block {
         padding: 15px;
     }
     
-    .info-card {
-        padding: 10px;
+    .qr-header-icon {
+        font-size: 2rem;
+    }
+    
+    .medicine-name {
+        font-size: 1.4rem;
     }
 }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    checkExpiryStatus();
-});
+document.addEventListener('DOMContentLoaded', checkExpiryStatus);
 
 function checkExpiryStatus() {
     const expiryDateStr = '{{ medicine.expiry_date }}';
     const expiryDate = new Date(expiryDateStr);
-    const today = new Date();
-    const timeDiff = expiryDate.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
-    const statusElement = document.getElementById('expiry-status-value');
-    
-    if (daysDiff < 0) {
-        statusElement.innerHTML = '<i class="fas fa-times-circle"></i> EXPIRED';
-        statusElement.className = 'info-value status-expired';
-    } else if (daysDiff <= 7) {
-        statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> EXPIRING SOON';
-        statusElement.className = 'info-value status-expiring-soon';
-    } else {
-        statusElement.innerHTML = '<i class="fas fa-check-circle"></i> VALID';
-        statusElement.className = 'info-value status-valid';
+    if (!isNaN(expiryDate.getTime())) {
+        const now = new Date();
+        const timeDiff = expiryDate.getTime() - now.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        const statusElement = document.getElementById('expiry-status-value');
+
+        if (daysDiff < 0) {
+            statusElement.innerHTML = '<i class="fas fa-times-circle"></i> EXPIRED';
+            statusElement.className = 'info-value status-expired';
+        } else if (daysDiff <= 3) {
+            statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> EXPIRING SOON';
+            statusElement.className = 'info-value status-expiring-soon';
+        } else {
+            statusElement.innerHTML = '<i class="fas fa-check-circle"></i> VALID';
+            statusElement.className = 'info-value status-valid';
+        }
     }
 }
 

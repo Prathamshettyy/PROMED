@@ -16,8 +16,9 @@
         
         <div class="qr-section">
             <h3>Scan QR Code</h3>
-            <img src="{{ url_for('static', filename=medicine.qr_code.replace('static/', '')) }}" 
-                 alt="QR Code for {{ medicine.name }}" class="qr-code-img">
+            {% set clean_path = medicine.qr_code.replace('static/', '').replace('static\\', '') %}
+<img src="{{ url_for('static', filename=clean_path) }}" 
+     alt="QR Code for {{ medicine.name }}" class="qr-code-img">
         </div>
     </div>
     

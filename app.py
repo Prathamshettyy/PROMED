@@ -347,7 +347,7 @@ def add_medicine():
                             manufacturing_date=mfg_date,
                             expiry_date=expiry_date,
                             uses=uses,
-                            qr_code=os.path.join('static', 'qrcodes', filename),
+                            qr_code=f'qrcodes/{filename}', 
                             user_id=session['user_id']
                         )
                         db.session.add(new_medicine)
