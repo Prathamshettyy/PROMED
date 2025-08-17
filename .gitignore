@@ -93,4 +93,7 @@ email_templates/
 
 # Configuration backups
 .env.backup
-config.backup
+config.backupvenv/
+*.db
+__pycache__/
+*.pyc
