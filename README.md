@@ -4,7 +4,16 @@
 
 ProMed is a web application that enables healthcare providers and individuals to record, retrieve and monitor medicine information using QR codes. The platform supports multi-user accounts, automated e-mail alerts for expiring medicines and a production-ready deployment configuration for PythonAnywhere.
 
-![ProMed Project Banner](https://github.com/aaronfernandes21/PROMED/blob/master/static/images/project-banner.png)
+---
+<p align="center">
+  <img src="\static\images\project-banner.png" width="70%" />
+</p>
+
+---
+## LIVE DEMO
+
+🔗 https://promed.pythonanywhere.com/
+
 ---
 
 ## Table of Contents
